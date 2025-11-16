@@ -15,6 +15,7 @@
             <th>ID</th>
             <th>Nom</th>
             <th>Prénom</th>
+            <th>Téléphone</th>
             <th>Email</th>
             <th>Adresse</th>
         </tr>
@@ -25,6 +26,7 @@
     <td>{{ $client->id }}</td>
     <td>{{ $client->nom }}</td>
     <td>{{ $client->prenom }}</td>
+    <td>{{ $client->phone }}</td>
     <td>{{ $client->email }}</td>
     <td>{{ $client->adresse }}</td>
 

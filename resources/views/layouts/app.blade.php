@@ -8,9 +8,16 @@
 </head>
 <body>
 <nav>
-    <a href="{{ route('clients.index') }}">Clients</a> |
-    <a href="{{ route('accounts.index') }}">Comptes</a> |
-    <a href="{{ route('transfers.index') }}">Virement</a>
+    <div style="background:#0b3c5d; padding:15px; display:flex; gap:20px;">
+    <a href="{{ url('/') }}" style="color:white;">🏠 Accueil</a>
+
+    <a href="{{ route('clients.index') }}" style="color:white;">👤 Clients</a>
+    <a href="{{ route('accounts.index') }}" style="color:white;">💳 Comptes</a>
+    <a href="{{ route('transfers.index') }}" style="color:white;">💸 Virements</a>
+
+    <a href="{{ route('stats.index') }}" style="color:white; font-weight:bold;">📊 Statistiques</a>
+</div>
+
 </nav>
 
 <div class="container">

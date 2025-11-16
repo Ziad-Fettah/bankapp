@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Hash;
 class ClientController extends Controller
 {
     /**
@@ -31,14 +31,19 @@ class ClientController extends Controller
      */
     public function store(Request $request)
 {
-    $request->validate([
+    $data = $request->validate([
         'nom' => 'required|string|max:255',
         'prenom' => 'required|string|max:255',
+        'phone' => 'required|numeric',
+        'adresse' => 'required|string|max:255',
         'email' => 'required|email|unique:clients,email',
-        'adresse' => 'nullable|string|max:255',
+        'password' => 'required|string|min:6|confirmed',
     ]);
 
-    Client::create($request->only('nom', 'prenom', 'email', 'adresse'));
+    $data['password'] = Hash::make($data['password']);
+    
+    Client::create($data);
+
 
     return redirect()->route('clients.index')->with('success', 'Client ajouté.');
 }
@@ -70,14 +75,22 @@ class ClientController extends Controller
 {
     $client = Client::findOrFail($id);
 
-    $request->validate([
+    $data = $request->validate([
         'nom' => 'required|string|max:255',
         'prenom' => 'required|string|max:255',
+        'phone' => 'required|numeric',
+        'adresse' => 'required|string|max:255',
         'email' => 'required|email|unique:clients,email,' . $client->id,
-        'adresse' => 'nullable|string|max:255',
+        'password' => 'required|string|min:6|confirmed',
     ]);
 
-    $client->update($request->only('nom', 'prenom', 'email', 'adresse'));
+    if (!empty($data['password'])) {
+        $data['password'] = Hash::make($data['password']);
+    } else {
+        unset($data['password']); // don't update password if empty
+    }
+
+    $client->update($request->only('nom', 'prenom','phone', 'email', 'adresse', 'password'));
 
     return redirect()->route('clients.index')->with('success', 'Client modifié.');
 }

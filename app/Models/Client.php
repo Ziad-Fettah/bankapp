@@ -11,8 +11,10 @@ class Client extends Model {
     protected $fillable = [
     'nom',
     'prenom',
-    'email',
+    'phone',
     'adresse',
+    'email',
+    'password',
 ];
 
     public function accounts() {

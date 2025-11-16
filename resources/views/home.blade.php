@@ -70,6 +70,11 @@
         <div class="card">
             <a href="{{ route('transfers.index') }}">💸 Virements</a>
         </div>
+
+        <div class="card">
+    <a href="{{ route('stats.index') }}">📊 Statistiques</a>
+</div>
+
     </div>
 
 </body>

@@ -142,6 +142,16 @@ public function logs()
     return view('accounts.logs', compact('logs'));
 }
 
+
+public function stats()
+{
+    $totalClients = \App\Models\Client::count();
+    $totalAccounts = \App\Models\Account::count();
+    $totalSolde = \App\Models\Account::sum('solde');
+
+    return view('accounts.stats', compact('totalClients', 'totalAccounts', 'totalSolde'));
+}
+
     /**
      * Remove the specified resource from storage.
      */
