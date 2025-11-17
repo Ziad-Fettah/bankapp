@@ -17,14 +17,37 @@ class TransferController extends Controller
         return view('transfers.create', compact('accounts'));
     }
 
-    public function index()
-{
-    // Fetch all transactions (latest first)
-    $transactions = Transaction::orderBy('created_at', 'desc')->get();
 
-    // Pass to the view
+public function index(Request $request)
+{
+    $query = Transaction::with(['fromAccount.client', 'toAccount.client']);
+
+    // Filter by account ID or client name
+    if ($request->has('search') && $request->search != '') {
+        $search = $request->search;
+
+        $query->whereHas('fromAccount.client', function($q) use ($search) {
+            $q->where('nom', 'like', "%{$search}%")
+              ->orWhere('prenom', 'like', "%{$search}%");
+        })
+        ->orWhereHas('toAccount.client', function($q) use ($search) {
+            $q->where('nom', 'like', "%{$search}%")
+              ->orWhere('prenom', 'like', "%{$search}%");
+        })
+        ->orWhere('from_account_id', 'like', "%{$search}%")
+        ->orWhere('to_account_id', 'like', "%{$search}%");
+    }
+
+    // Filter by date
+    if ($request->has('date') && $request->date != '') {
+        $query->whereDate('created_at', $request->date);
+    }
+
+    $transactions = $query->get();
+
     return view('transfers.index', compact('transactions'));
 }
+
 
 
 

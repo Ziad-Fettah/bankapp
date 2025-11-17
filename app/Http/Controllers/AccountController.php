@@ -15,11 +15,40 @@ class AccountController extends Controller
     /**
      * Display a listing of the resource.
      */
-public function index()
+public function index(Request $request)
 {
-    $accounts = Account::with('client')->get();
+    // base query
+    $query = Account::with('client');
+
+    // 🔍 SEARCH (client name or rib)
+    if ($request->has('search') && $request->search !== '') {
+        $search = $request->search;
+
+        $query->whereHas('client', function ($q) use ($search) {
+            $q->where('nom', 'LIKE', "%$search%")
+              ->orWhere('prenom', 'LIKE', "%$search%");
+        })
+        ->orWhere('rib', 'LIKE', "%$search%");
+    }
+
+    // 🔽 SORT
+    if ($request->has('sort') && in_array($request->sort, ['solde_asc', 'solde_desc'])) {
+
+        if ($request->sort === 'solde_asc') {
+            $query->orderBy('solde', 'asc');
+        }
+
+        if ($request->sort === 'solde_desc') {
+            $query->orderBy('solde', 'desc');
+        }
+    }
+
+    // finally get the accounts
+    $accounts = $query->get();
+
     return view('accounts.index', compact('accounts'));
 }
+
 
 public function create()
 {
@@ -133,12 +162,27 @@ public function unfreeze($id)
     return redirect()->back()->with('success', 'Compte dégelé.');
 }
 
-public function logs()
-{
-    // Fetch all logs, latest first
-    $logs = AccountLog::orderBy('created_at', 'desc')->get();
+public function logs(Request $request) {
+    $query = AccountLog::with('account.client');
 
-    // Pass logs to a Blade view called 'logs'
+    // Search by client name or account ID
+    if ($request->has('search') && $request->search != '') {
+        $search = $request->search;
+
+        $query->whereHas('account.client', function($q) use ($search) {
+            $q->where('nom', 'like', "%{$search}%")
+              ->orWhere('prenom', 'like', "%{$search}%");
+        })
+        ->orWhere('account_id', 'like', "%{$search}%");
+    }
+
+    // Filter by date
+    if ($request->has('date') && $request->date != '') {
+        $query->whereDate('created_at', $request->date);
+    }
+
+    $logs = $query->get();
+
     return view('accounts.logs', compact('logs'));
 }
 

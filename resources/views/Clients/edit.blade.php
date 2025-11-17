@@ -25,7 +25,7 @@
 <input type="text" name="phone" value="{{ old('phone', $client->phone) }}" required><br><br>
 
     <label>Adresse:</label>
-    <input type="text" name="adresse" value="{{ old('adresse') }}" required><br><br>
+    <input type="text" name="adresse" value="{{ old('adresse', $client->adresse) }}" required><br><br>
 
 
     <label>Email:</label>

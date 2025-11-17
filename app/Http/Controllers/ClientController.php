@@ -10,11 +10,47 @@ class ClientController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
 {
-    $clients = Client::all();
+    $query = Client::query();
+
+    /* --------------------------------
+      SEARCH (independent from sorting)
+    --------------------------------- */
+    if ($request->has('search') && $request->search !== '') {
+        $search = $request->search;
+
+        $query->where(function ($q) use ($search) {
+            $q->where('nom', 'LIKE', "%$search%")
+              ->orWhere('prenom', 'LIKE', "%$search%")
+              ->orWhere('phone', 'LIKE', "%$search%");
+        });
+    }
+
+    /* -----------------------------
+       SORT (independent from search)
+    ------------------------------ */
+
+    if ($request->has('sort_by') && $request->sort_by !== '') {
+
+        $sortBy = $request->sort_by;
+
+        // Only allowed sortable columns
+        $allowedSorts = ['id', 'nom', 'prenom', 'email'];
+
+        if (in_array($sortBy, $allowedSorts)) {
+            $direction = $request->sort_direction === 'desc' ? 'desc' : 'asc';
+            $query->orderBy($sortBy, $direction);
+        }
+    }
+
+    $clients = $query->get();
+
     return view('clients.index', compact('clients'));
 }
+
+
+
 
 
     /**

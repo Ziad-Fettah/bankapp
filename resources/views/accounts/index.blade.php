@@ -12,6 +12,21 @@
     📄 Voir Historique des Comptes
 </a>
 
+<form method="GET" action="{{ route('accounts.index') }}" style="margin-bottom:20px;">
+    <input type="text" name="search" 
+           placeholder="Rechercher par nom, prénom ou RIB"
+           value="{{ request('search') }}">
+
+    <select name="sort">
+        <option value="">-- Trier par solde --</option>
+        <option value="solde_asc"  {{ request('sort') == 'solde_asc' ? 'selected' : '' }}>Solde Croissant</option>
+        <option value="solde_desc" {{ request('sort') == 'solde_desc' ? 'selected' : '' }}>Solde Décroissant</option>
+    </select>
+
+    <button type="submit">Filtrer</button>
+</form>
+
+
 <table>
   <thead>
     <tr>

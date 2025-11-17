@@ -6,17 +6,25 @@ use Illuminate\Database\Eloquent\Model;
 
 class Transaction extends Model
 {
-    // Specify the correct table
     protected $table = 'transactions';
 
-    // Fields that can be mass-assigned
     protected $fillable = [
         'from_account_id',
         'to_account_id',
         'amount',
         'action',
-        'type', // optional, if you track deposit/transfer/withdraw
+        'type',
     ];
 
-    public $timestamps = true; // created_at / updated_at
+    // From account relationship
+    public function fromAccount() {
+        return $this->belongsTo(Account::class, 'from_account_id'); // FIXED column name
+    }
+
+    // To account relationship
+    public function toAccount() {
+        return $this->belongsTo(Account::class, 'to_account_id'); // FIXED column name
+    }
+
+    public $timestamps = true;
 }
