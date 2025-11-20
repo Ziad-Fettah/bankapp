@@ -121,15 +121,37 @@ public function create()
     $account = Account::findOrFail($id);
 
     $request->validate([
-        'solde' => 'required|numeric', // validate solde
+        'solde' => 'required|numeric',
+        'client_id' => 'required|exists:clients,id',
     ]);
 
-    $account->update([
-        'solde' => $request->solde, // update solde
-    ]);
+    $data = [
+        'solde' => $request->solde,
+        'client_id' => $request->client_id,
+    ];
 
-    return redirect()->route('accounts.index')->with('success', 'Solde mis à jour avec succès !');
+    // Generate new RIB if checkbox is checked
+    if ($request->has('generate_rib')) {
+        $data['rib'] = $this->generateRib();
+    }
+
+    $account->update($data);
+
+    return redirect()->route('accounts.index')->with('success', 'Compte mis à jour avec succès !');
 }
+
+/**
+ * Generate a random RIB starting with 812
+ */
+private function generateRib()
+{
+    do {
+        $rib = '812' . str_pad(random_int(0, 99999999999), 11, '0', STR_PAD_LEFT); // 11 random digits after 812
+    } while (Account::where('rib', $rib)->exists()); // ensure unique
+
+    return $rib;
+}
+
 
 
 
