@@ -12,10 +12,11 @@ use Illuminate\Support\Facades\DB;
 class TransferController extends Controller
 {
     public function create()
-    {
-        $accounts = Account::with('client')->get();
-        return view('transfers.create', compact('accounts'));
-    }
+{
+    $clients = \App\Models\Client::with('accounts')->get();
+    return view('transfers.create', compact('clients'));
+}
+
 
 
 public function index(Request $request)
