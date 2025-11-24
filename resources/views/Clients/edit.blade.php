@@ -2,7 +2,7 @@
 
 @section('content')
 
-<h2 style="text-align:center; margin-bottom:20px;">Modifier un client</h2>
+<h2 style="text-align:center; margin-bottom:20px;">Modifier le client</h2>
 
 @if ($errors->any())
     <div style="color:red; margin-bottom:15px; text-align:center;">

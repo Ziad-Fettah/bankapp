@@ -11,6 +11,8 @@ class Client extends Model {
     protected $fillable = [
     'nom',
     'prenom',
+    'sexe',                // add this
+    'date_de_naissance',   // add this
     'phone',
     'adresse',
     'email',

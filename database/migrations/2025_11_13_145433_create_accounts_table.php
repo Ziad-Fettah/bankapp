@@ -16,6 +16,7 @@ return new class extends Migration
     $table->string('rib')->unique(); // RIB
     $table->decimal('solde', 10, 2)->default(0); // Solde
     $table->foreignId('client_id')->constrained('clients')->onDelete('cascade'); // belongs to a client
+    $table->string('type')->nullable();
     $table->timestamps();
 });
 

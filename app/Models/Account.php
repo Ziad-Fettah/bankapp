@@ -10,6 +10,8 @@ class Account extends Model
         'rib',
         'solde',
         'client_id',
+        'type',
+        'status'
     ];
 
     public function client()

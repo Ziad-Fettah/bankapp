@@ -15,8 +15,12 @@ body {
 .container {
     max-width: 900px;
     margin: 30px auto;
-    padding: 0 15px;
+    padding: 25px 25px; /* ← FIXED */
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.08);
 }
+
 
 /* Heading */
 h1 {
@@ -29,10 +33,11 @@ h1 {
 form {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px 10px; /* vertical and horizontal gaps */
-    margin-bottom: 25px;
-    align-items: end;
+    gap: 15px 10px;
+    margin: 20px 0 30px 0; /* ← FIXED: adds top + bottom space */
+    padding: 15px 0; /* ← FIXED: inner padding */
 }
+
 
 .form-group {
     display: flex;
@@ -55,7 +60,8 @@ form input[type="date"] {
 }
 
 form button {
-    padding: 10px 20px;
+    padding: 10px ;
+    margin-top: 25px;
     border: none;
     border-radius: 5px;
     background-color: #0b3c5d;
@@ -63,11 +69,11 @@ form button {
     cursor: pointer;
     font-weight: 500;
     transition: 0.3s;
-    height: 42px; /* aligns with input fields */
+    height: 36px; /* aligns with input fields */
 }
 
 form button:hover {
-    background-color: #094060;
+    background-color: #ffd700;
 }
 
 /* Table */
@@ -109,12 +115,12 @@ p {
 </style>
 
 <div class="container">
-    <h1>Account Logs</h1>
+    <h1>Historique des Comptes</h1>
 
     <form action="{{ url('/accounts/logs') }}" method="GET">
         <div class="form-group">
-            <label for="search">Search</label>
-            <input type="text" name="search" id="search" placeholder="Client name, account ID, or action" value="{{ request('search') }}">
+            <label for="search">recherche</label>
+            <input type="text" name="search" id="search" placeholder="nom du client, ID du compte, ou action" value="{{ request('search') }}">
         </div>
 
         <div class="form-group">
@@ -123,7 +129,7 @@ p {
         </div>
 
         <div class="form-group">
-            <button type="submit">Filter</button>
+            <button type="submit">Filtrer</button>
         </div>
     </form>
 
@@ -134,8 +140,8 @@ p {
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Account ID</th>
-                    <th>Client Name</th>
+                    <th>ID du Compte</th>
+                    <th>Nom du client</th>
                     <th>Action</th>
                     <th>Date</th>
                 </tr>

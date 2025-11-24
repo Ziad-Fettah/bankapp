@@ -13,10 +13,14 @@ body {
 
 /* Container */
 .container {
-    max-width: 1000px;
+    max-width: 900px;
     margin: 30px auto;
-    padding: 0 15px;
+    padding: 25px 25px; /* ← FIXED */
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.08);
 }
+
 
 /* Heading */
 h1 {
@@ -47,10 +51,11 @@ a.btn:hover, button:hover {
 form {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px 10px; /* vertical, horizontal spacing */
-    margin-bottom: 25px;
-    align-items: end;
+    gap: 15px 10px;
+    margin: 20px 0 30px 0; /* ← FIXED: adds top + bottom space */
+    padding: 15px 0; /* ← FIXED: inner padding */
 }
+
 
 .form-group {
     display: flex;
@@ -73,7 +78,8 @@ form input[type="date"] {
 }
 
 form button {
-    height: 42px; /* align with input fields */
+    height: 42px;
+    margin-top: 23px; /* align with input fields */
 }
 
 /* Table */
@@ -115,14 +121,14 @@ p {
 </style>
 
 <div class="container">
-    <h1>Transfer History</h1>
+    <h1>Historique des Transfers</h1>
 
-    <a href="{{ route('transfers.create') }}" class="btn mb-3">New Transfer</a>
+    <a href="{{ route('transfers.create') }}" class="btn mb-3">Nouveau Transfer</a>
 
     <form action="{{ route('transfers.index') }}" method="GET">
         <div class="form-group">
-            <label for="search">Search</label>
-            <input type="text" name="search" id="search" placeholder="Account ID or client name" value="{{ request('search') }}">
+            <label for="search">recherche</label>
+            <input type="text" name="search" id="search" placeholder="ID_Compte ou Nom du client" value="{{ request('search') }}">
         </div>
 
         <div class="form-group">
@@ -131,7 +137,7 @@ p {
         </div>
 
         <div class="form-group">
-            <button type="submit">Filter</button>
+            <button type="submit">Filtrer</button>
         </div>
     </form>
 
@@ -142,11 +148,11 @@ p {
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>From Account ID</th>
-                    <th>From Client</th>
-                    <th>To Account ID</th>
-                    <th>To Client</th>
-                    <th>Amount</th>
+                    <th>du ID_Compte</th>
+                    <th>Du Client</th>
+                    <th>Au ID_Compte</th>
+                    <th>Au Client</th>
+                    <th>Montant</th>
                     <th>Date</th>
                 </tr>
             </thead>

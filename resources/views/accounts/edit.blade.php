@@ -84,7 +84,7 @@ form button:hover {
 }
 </style>
 
-<h2>Modifier un compte</h2>
+<h2>Modifier le compte</h2>
 
 @if ($errors->any())
   <div class="errors">
@@ -115,6 +115,16 @@ form button:hover {
         <input type="checkbox" id="generate_rib" name="generate_rib" value="1">
         <label for="generate_rib">Générer un nouveau RIB</label>
     </div>
+
+
+    <label>Type du compte :</label>
+<select name="type" required>
+    <option value="jeune" {{ $account->type=='jeune' ? 'selected' : '' }}>Jeune</option>
+    <option value="standard" {{ $account->type=='standard' ? 'selected' : '' }}>Standard</option>
+    <option value="vielle" {{ $account->type=='vielle' ? 'selected' : '' }}>Vieille</option>
+    <option value="sayidati" {{ $account->type=='sayidati' ? 'selected' : '' }}>Sayidati</option>
+</select>
+
 
     <button type="submit">Modifier</button>
 </form>

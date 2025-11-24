@@ -99,6 +99,20 @@ form button:hover {
         @endforeach
     </select>
 
+    <!-- ... client select ... -->
+
+<div>
+    <label>Type de compte :</label>
+    <select name="type" required>
+        <option value="">-- Choisir le type --</option>
+        <option value="jeune">Jeune (18–30)</option>
+        <option value="standard">Standard (30–60 ou si déjà compte Jeune)</option>
+        <option value="sayidati">Sayidati (Femme, 30+)</option>
+        <option value="vielle">Vielle (60+)</option>
+    </select>
+</div>
+
+
     <button type="submit">Créer</button>
 </form>
 @endsection

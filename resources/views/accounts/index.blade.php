@@ -59,7 +59,7 @@ button {
 }
 
 button:hover {
-    background-color: #094060;
+    background: #145a89;
 }
 
 .btn-secondary {
@@ -139,7 +139,7 @@ td form button:hover {
 }
 </style>
 
-<h2>Comptes</h2>
+<h2>Listes des Comptes</h2>
 
 @if(session('success'))
   <div class="alert">{{ session('success') }}</div>
