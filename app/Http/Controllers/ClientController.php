@@ -80,10 +80,17 @@ class ClientController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        //
-    }
+    public function show($id)
+{
+    // Load client with their accounts
+    $client = Client::with('accounts')->findOrFail($id);
+
+    // Calculate sum of all accounts
+    $totalSolde = $client->accounts->sum('solde');
+
+    return view('clients.show', compact('client', 'totalSolde'));
+}
+
 
     /**
      * Show the form for editing the specified resource.

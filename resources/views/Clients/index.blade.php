@@ -198,9 +198,19 @@
         <tbody>
             @foreach($clients as $client)
                 <tr>
-                    <td>{{ $client->id }}</td>
-                    <td>{{ $client->nom }}</td>
-                    <td>{{ $client->prenom }}</td>
+                    <td><a href="{{ route('clients.show', $client->id) }}" class="text-blue-600 hover:underline">
+                    {{ $client->id }}
+                </a></td>
+                    {{-- Make client name clickable to show page --}}
+            <td>
+                <a href="{{ route('clients.show', $client->id) }}" class="text-blue-600 hover:underline">
+                    {{ $client->nom }}
+                </a>
+            </td>
+                    <td><a href="{{ route('clients.show', $client->id) }}" class="text-blue-600 hover:underline">
+                    {{ $client->prenom }}
+                </a>
+            </td>
                     <td>{{ $client->sexe }}</td>
                     <td>{{ $client->date_de_naissance }}</td>
                     <td>{{ $client->phone }}</td>
