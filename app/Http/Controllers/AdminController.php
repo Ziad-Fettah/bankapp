@@ -32,9 +32,10 @@ class AdminController extends Controller
         return back()->withErrors(['email' => 'Email ou mot de passe incorrect']);
     }
 
-    public function logout()
-    {
-        session()->forget('admin_id');
-        return redirect()->route('admin.login');
-    }
+    public function logout(Request $request)
+{
+    session()->forget('admin_id'); // remove admin session
+    return redirect()->route('admin.login'); // redirect to login
+}
+
 }

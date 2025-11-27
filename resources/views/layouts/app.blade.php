@@ -145,6 +145,27 @@
 </head>
 <body>
     
+    <!-- Logout Button (top-right) -->
+    @if(session()->has('admin_id'))
+    <form action="{{ route('admin.logout') }}" method="POST" style="
+        position: fixed;
+        top: 15px;
+        right: 20px;
+        z-index: 1200;
+    ">
+        @csrf
+        <button type="submit" style="
+            background:#b00020;
+            color:white;
+            border:none;
+            padding:8px 15px;
+            border-radius:6px;
+            cursor:pointer;
+        ">
+            Deconnecter
+        </button>
+    </form>
+    @endif
 
     <div class="container">
         @if(session('success'))
