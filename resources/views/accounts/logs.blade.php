@@ -1,163 +1,113 @@
 @extends('layouts.app')
 
+@section('title', 'Historique Comptes - Amane Bank')
+
 @section('content')
-<style>
-/* Global Styles */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f7fa;
-    color: #333;
-    margin: 0;
-    padding: 0;
-}
 
-/* Container */
-.container {
-    max-width: 900px;
-    margin: 30px auto;
-    padding: 25px 25px; /* ← FIXED */
-    background: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.08);
-}
+<main class="main-content">
 
+    <h1 class="page-title">
+        Historique des Comptes
+    </h1>
+    <p class="page-subtitle">Suivi détaillé des actions effectuées sur les comptes bancaires</p>
 
-/* Heading */
-h1 {
-    text-align: center;
-    color: #0b3c5d;
-    margin-bottom: 30px;
-}
+    <!-- Barre de filtres -->
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 32px; justify-content: space-between; align-items: center;">
 
-/* Form */
-form {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px 10px;
-    margin: 20px 0 30px 0; /* ← FIXED: adds top + bottom space */
-    padding: 15px 0; /* ← FIXED: inner padding */
-}
+        <form method="GET" action="{{ url('/accounts/logs') }}" 
+              style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
 
+            <input type="text" name="search" placeholder="Rechercher par nom, compte ou action..."
+                   value="{{ request('search') }}"
+                   style="min-width: 280px; padding: 14px 18px; background: rgba(255,255,255,0.08);
+                          border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; 
+                          color: white; font-size: 15px;">
 
-.form-group {
-    display: flex;
-    flex-direction: column;
-}
+            <input type="date" name="date" value="{{ request('date') }}"
+                   style="padding: 14px 18px; background: rgba(255,255,255,0.08);
+                          border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; 
+                          color: white;">
 
-form label {
-    margin-bottom: 5px;
-    font-weight: 500;
-    color: #0b3c5d;
-}
+            <button type="submit"
+                    style="padding: 14px 24px; background: #3b82f6; color: white; border: none; 
+                           border-radius: 12px; font-weight: 600; cursor: pointer;">
+                Filtrer
+            </button>
+        </form>
+    
 
-form input[type="text"],
-form input[type="date"] {
-    padding: 8px 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    box-sizing: border-box;
-    width: 100%;
-}
+    <!-- Bouton Retour -->
+<a href="{{ route('accounts.index') }}" style="display: flex; align-items: center;">
+    <button style="
+        padding: 14px 24px;
+        background: linear-gradient(135deg, var(--accent), #f0c757);
+        color: #0f172a;
+        border: none;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 5px 18px rgba(212,175,55,0.3);
+    ">
+        ← Retour
+    </button>
+</a>
+</div
 
-form button {
-    padding: 10px ;
-    margin-top: 25px;
-    border: none;
-    border-radius: 5px;
-    background-color: #0b3c5d;
-    color: #fff;
-    cursor: pointer;
-    font-weight: 500;
-    transition: 0.3s;
-    height: 36px; /* aligns with input fields */
-}
+    <!-- Tableau des logs -->
+    <div class="stats-grid" style="grid-template-columns: 1fr;">
+        <div class="stat-card" style="padding: 0; overflow: hidden;">
 
-form button:hover {
-    background-color: #ffd700;
-}
+            @if($logs->isEmpty())
+                <p style="padding: 50px; text-align:center; color:#64748b; font-size:17px;">
+                    Aucun log trouvé
+                </p>
+            @else
 
-/* Table */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 0 10px rgba(0,0,0,0.05);
-}
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; min-width: 1000px;">
+                    <thead>
+                        <tr style="background: rgba(255,255,255,0.08);">
+                            <th style="padding: 20px; text-align: left; color: #e2e8f0; font-weight: 600;">ID</th>
+                            <th style="padding: 20px; text-align: left; color: #e2e8f0; font-weight: 600;">Compte ID</th>
+                            <th style="padding: 20px; text-align: left; color: #e2e8f0; font-weight: 600;">Client</th>
+                            <th style="padding: 20px; text-align: left; color: #e2e8f0; font-weight: 600;">Action</th>
+                            <th style="padding: 20px; text-align: left; color: #e2e8f0; font-weight: 600;">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-thead {
-    background-color: #0b3c5d;
-    color: #fff;
-}
+                        @foreach($logs as $log)
+                        <tr style="border-top: 1px solid rgba(255,255,255,0.08); transition: all 0.3s;">
 
-thead th {
-    padding: 12px;
-    text-align: left;
-}
+                            <td style="padding: 20px; color: #94a3b8;">#{{ $log->id }}</td>
 
-tbody td {
-    padding: 12px;
-    border-bottom: 1px solid #ddd;
-}
+                            <td style="padding: 20px; color: white; font-weight:600;">
+                                {{ $log->account_id }}
+                            </td>
 
-tbody tr:hover {
-    background-color: #f1f1f1;
-}
+                            <td style="padding: 20px; color: #cbd5e1;">
+                                {{ $log->account->client->nom }} {{ $log->account->client->prenom }}
+                            </td>
 
-/* No logs message */
-p {
-    text-align: center;
-    color: #555;
-    font-style: italic;
-    margin-top: 20px;
-}
-</style>
+                            <td style="padding: 20px; color: #eab308; font-weight:600;">
+                                {{ $log->action }}
+                            </td>
 
-<div class="container">
-    <h1>Historique des Comptes</h1>
+                            <td style="padding: 20px; color: #94a3b8;">
+                                {{ $log->created_at }}
+                            </td>
 
-    <form action="{{ url('/accounts/logs') }}" method="GET">
-        <div class="form-group">
-            <label for="search">recherche</label>
-            <input type="text" name="search" id="search" placeholder="nom du client, ID du compte, ou action" value="{{ request('search') }}">
+                        </tr>
+                        @endforeach
+
+                    </tbody>
+                </table>
+            </div>
+            @endif
+
         </div>
+    </div>
 
-        <div class="form-group">
-            <label for="date">Date</label>
-            <input type="date" name="date" id="date" value="{{ request('date') }}">
-        </div>
+</main>
 
-        <div class="form-group">
-            <button type="submit">Filtrer</button>
-        </div>
-    </form>
-
-    @if($logs->isEmpty())
-        <p>No logs found.</p>
-    @else
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>ID du Compte</th>
-                    <th>Nom du client</th>
-                    <th>Action</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($logs as $log)
-                    <tr>
-                        <td>{{ $log->id }}</td>
-                        <td>{{ $log->account_id }}</td>
-                        <td>{{ $log->account->client->nom }} {{ $log->account->client->prenom }}</td>
-                        <td>{{ $log->action }}</td>
-                        <td>{{ $log->created_at }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    @endif
-</div>
 @endsection

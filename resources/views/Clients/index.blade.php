@@ -1,242 +1,134 @@
+{{-- resources/views/clients/index.blade.php --}}
 @extends('layouts.app')
+
+@section('title', 'Clients - Amane Bank')
 
 @section('content')
 
-<style>
-    /* Page container */
-    .page-container {
-        background: linear-gradient(135deg, #2c003e, #4b007f); /* midnight purple → violet */
-        padding: 30px;
-        border-radius: 15px;
-        color: #fff;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-    }
+<main class="main-content">
 
-    /* Title */
-    h2 {
-        text-align: center;
-        margin-bottom: 25px;
-        font-size: 28px;
-        color: #ffd700; /* gold accent */
-        text-shadow: 1px 1px 5px rgba(0,0,0,0.6);
-    }
+    <h1 class="page-title">Gestion des Clients</h1>
+    <p class="page-subtitle">Recherche, tri et gestion complète de la clientèle</p>
 
-    /* Add Client Button */
-    .btn-add {
-        display: inline-block;
-        margin-bottom: 25px;
-        padding: 12px 25px;
-        background: #ffd700; /* gold */
-        color: #2c003e;
-        text-decoration: none;
-        font-weight: bold;
-        border-radius: 10px;
-        transition: 0.3s;
-    }
-    .btn-add:hover {
-        background: #e6c200;
-    }
-
-    /* Search & Sort Form */
-    .form-controls {
-        margin-bottom: 25px;
-        display: flex;
-        gap: 12px;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
-    .form-controls input,
-    .form-controls select {
-        padding: 10px;
-        border-radius: 8px;
-        border: none;
-        min-width: 150px;
-        background: rgba(255,255,255,0.1);
-        color: #fff;
-    }
-
-    .form-controls input::placeholder { color: #ddd; }
-
-    .form-controls button {
-        padding: 10px 18px;
-        background: #ffd700;
-        color: #2c003e;
-        font-weight: bold;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-    .form-controls button:hover {
-        background: #e6c200;
-    }
-
-    /* Table */
-    table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        background: rgba(255,255,255,0.05);
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-    }
-
-    table th {
-        background: #4b007f;
-        color: #ffd700;
-        padding: 14px;
-        text-align: left;
-    }
-
-    table td {
-        padding: 14px;
-        background: rgba(255,255,255,0.05);
-        border-bottom: 1px solid rgba(255,255,255,0.15);
-    }
-
-    tr:hover td {
-        background: rgba(255,255,255,0.15);
-    }
-
-    /* Action buttons */
-    .btn-edit {
-        padding: 6px 14px;
-        background: #8e44ad; /* violet */
-        color: white;
-        text-decoration: none;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: bold;
-        transition: 0.3s;
-    }
-    .btn-edit:hover {
-        background: #732d91;
-    }
-
-    .btn-delete {
-        padding: 6px 14px;
-        background: #e74c3c; /* red */
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-    .btn-delete:hover {
-        background: #c0392b;
-    }
-
-    /* Success message */
-    .success-message {
-        color: #2ecc71; /* green */
-        font-weight: bold;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-</style>
-
-<div class="page-container">
-
-    <h2>Liste des clients</h2>
-
-    <a href="{{ route('clients.create') }}" class="btn-add">
-        ➕ Ajouter un client
-    </a>
-
+    <!-- Message de succès -->
     @if(session('success'))
-        <p class="success-message">
+        <div style="background: rgba(16,185,129,0.15); border-left: 4px solid #10b981; padding: 18px 24px; border-radius: 12px; color: #10b981; margin-bottom: 32px; font-weight: 500; backdrop-filter: blur(10px);">
             {{ session('success') }}
-        </p>
+        </div>
     @endif
 
-    {{-- Search + Sort Bar --}}
-    <form method="GET" action="{{ route('clients.index') }}" class="form-controls">
+    <!-- Barre d'actions + recherche -->
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 32px; justify-content: space-between; align-items: center;">
+        <div style="display: flex; gap: 12px;">
+            <a href="{{ route('clients.create') }}">
+                <button style="padding: 14px 28px; background: linear-gradient(135deg, var(--accent), #f0c757); color: #0f172a; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 20px rgba(212,175,55,0.3); transition: all 0.3s;">
+                    Ajouter un client
+                </button>
+            </a>
+        </div>
 
-        <input type="text" 
-               name="search" 
-               placeholder="Rechercher..."
-               value="{{ request('search') }}">
+        <form method="GET" action="{{ route('clients.index') }}" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+            <input type="text" name="search" placeholder="Rechercher un client..." value="{{ request('search') }}"
+                   style="min-width: 280px; padding: 14px 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; color: white; font-size: 15px; transition: all 0.3s;"
+                   onfocus="this.style.borderColor='#fbbf24'; this.style.boxShadow='0 0 0 3px rgba(251,191,36,0.2)'"
+                   onblur="this.style.borderColor='rgba(255,255,255,0.15)'; this.style.boxShadow='none'">
 
-        <select name="sort_by">
-            <option value="">Trier par...</option>
-            <option value="id" {{ request('sort_by')=='id' ? 'selected' : '' }}>ID</option>
-            <option value="nom" {{ request('sort_by')=='nom' ? 'selected' : '' }}>Nom</option>
-            <option value="prenom" {{ request('sort_by')=='prenom' ? 'selected' : '' }}>Prénom</option>
-            <option value="email" {{ request('sort_by')=='email' ? 'selected' : '' }}>Email</option>
-        </select>
+            <select name="sort_by" style="padding: 14px 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; color: white; transition: all 0.3s;">
+                <option value="">Trier par...</option>
+                <option value="id" {{ request('sort_by')=='id' ? 'selected' : '' }}>ID</option>
+                <option value="nom" {{ request('sort_by')=='nom' ? 'selected' : '' }}>Nom</option>
+                <option value="prenom" {{ request('sort_by')=='prenom' ? 'selected' : '' }}>Prénom</option>
+                <option value="email" {{ request('sort_by')=='email' ? 'selected' : '' }}>Email</option>
+            </select>
 
-        <select name="sort_direction">
-            <option value="asc" {{ request('sort_direction')=='asc' ? 'selected' : '' }}>Croissant</option>
-            <option value="desc" {{ request('sort_direction')=='desc' ? 'selected' : '' }}>Décroissant</option>
-        </select>
+            <select name="sort_direction" style="padding: 14px 18px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; color: white; transition: all 0.3s;">
+                <option value="asc" {{ request('sort_direction')=='asc' ? 'selected' : '' }}>Croissant</option>
+                <option value="desc" {{ request('sort_direction')=='desc' ? 'selected' : '' }}>Décroissant</option>
+            </select>
 
-        <button type="submit">Appliquer</button>
-    </form>
+            <button type="submit" style="padding: 14px 24px; background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 15px rgba(59,130,246,0.3); transition: all 0.3s;">
+                Appliquer
+            </button>
+        </form>
+    </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Sexe</th>
-                <th>Date de naissance</th>
-                <th>Téléphone</th>
-                <th>Email</th>
-                <th>Adresse</th>
-                <th>Modifier</th>
-                <th>Supprimer</th>
-            </tr>
-        </thead>
+    <!-- Tableau des clients -->
+    <div class="stats-grid" style="grid-template-columns: 1fr;">
+        <div class="stat-card" style="padding: 0; overflow: hidden; border-radius: 16px;">
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; min-width: 1200px;">
+                    <thead>
+                        <tr style="background: rgba(255,255,255,0.08);">
+                            <th style="padding: 20px; text-align: left; color: #e2e8f0; font-weight: 600;">ID</th>
+                            <th style="padding: 20px; text-align: left; color: #e2e8f0; font-weight: 600;">Nom</th>
+                            <th style="padding: 20px; text-align: left; color: #e2e8f0; font-weight: 600;">Prénom</th>
+                            <th style="padding: 20px; text-align: left; color: #e2e8f0; font-weight: 600;">Sexe</th>
+                            <th style="padding: 20px; text-align: left; color: #e2e8f0; font-weight: 600;">Né(e) le</th>
+                            <th style="padding: 20px; text-align: left; color: #e2e8f0; font-weight: 600;">Téléphone</th>
+                            <th style="padding: 20px; text-align: left; color: #e2e8f0; font-weight: 600;">Email</th>
+                            <th style="padding: 20px; text-align: left; color: #e2e8f0; font-weight: 600;">Adresse</th>
+                            <th style="padding: 20px; text-align: center; color: #e2e8f0; font-weight: 600;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($clients as $client)
+                        <tr style="border-top: 1px solid rgba(255,255,255,0.08); transition: all 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                            <td style="padding: 20px; color: #94a3b8; font-family: 'Courier New', monospace;">#{{ $client->id }}</td>
+                            <td style="padding: 20px; color: white; font-weight: 600;">
+                                <a href="{{ route('clients.show', $client->id) }}" style="color: white; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='#fbbf24'" onmouseout="this.style.color='white'">
+                                    {{ $client->nom }}
+                                </a>
+                            </td>
+                            <td style="padding: 20px; color: white;">
+                                <a href="{{ route('clients.show', $client->id) }}" style="color: white; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='#fbbf24'" onmouseout="this.style.color='white'">
+                                    {{ $client->prenom }}
+                                </a>
+                            </td>
+                            <td style="padding: 20px; color: #cbd5e1;">{{ ucfirst($client->sexe) }}</td>
+                            <td style="padding: 20px; color: #cbd5e1;">
+                                {{ $client->date_de_naissance ? \Carbon\Carbon::parse($client->date_de_naissance)->format('d/m/Y') : '-' }}
+                            </td>
+                            <td style="padding: 20px; color: #cbd5e1; font-family: 'Courier New', monospace;">{{ $client->phone ?? '-' }}</td>
+                            <td style="padding: 20px; color: #cbd5e1;">{{ $client->email }}</td>
+                            <td style="padding: 20px; color: #94a3b8; max-width: 280px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="{{ $client->adresse }}">
+                                {{ $client->adresse ?? '-' }}
+                            </td>
+                            <td style="padding: 20px; text-align: center;">
+                                <div style="display: flex; gap: 12px; justify-content: center;">
+                                    <a href="{{ route('clients.show', $client->id) }}" title="Voir la fiche">
+                                        <button style="width: 42px; height: 42px; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(16,185,129,0.3); transition: all 0.3s;">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </a>
+                                    <a href="{{ route('clients.edit', $client->id) }}" title="Modifier">
+                                        <button style="width: 42px; height: 42px; background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(59,130,246,0.3); transition: all 0.3s;">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </a>
+                                    <form action="{{ route('clients.destroy', $client->id) }}" method="POST" style="display: inline;">
+                                        @csrf @method('DELETE')
+                                        <button type="submit" onclick="return confirm('Supprimer définitivement ce client ?')" title="Supprimer"
+                                                style="width: 42px; height: 42px; background: linear-gradient(135deg, #ef4444, #dc2626); color: white; border: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(239,68,68,0.3); transition: all 0.3s;">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="9" style="padding: 80px; text-align: center; color: #64748b; font-size: 18px;">
+                                Aucun client trouvé<br><br>
+                                <a href="{{ route('clients.create') }}" style="color: #fbbf24; font-weight: 600;">Ajouter le premier client</a>
+                            </td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-        <tbody>
-            @foreach($clients as $client)
-                <tr>
-                    <td><a href="{{ route('clients.show', $client->id) }}" class="text-blue-600 hover:underline">
-                    {{ $client->id }}
-                </a></td>
-                    {{-- Make client name clickable to show page --}}
-            <td>
-                <a href="{{ route('clients.show', $client->id) }}" class="text-blue-600 hover:underline">
-                    {{ $client->nom }}
-                </a>
-            </td>
-                    <td><a href="{{ route('clients.show', $client->id) }}" class="text-blue-600 hover:underline">
-                    {{ $client->prenom }}
-                </a>
-            </td>
-                    <td>{{ $client->sexe }}</td>
-                    <td>{{ $client->date_de_naissance }}</td>
-                    <td>{{ $client->phone }}</td>
-                    <td>{{ $client->email }}</td>
-                    <td>{{ $client->adresse }}</td>
-
-                    <td>
-                        <a class="btn-edit" href="{{ route('clients.edit', $client->id) }}">
-                            Modifier
-                        </a>
-                    </td>
-
-                    <td>
-                        <form action="{{ route('clients.destroy', $client->id) }}" method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn-delete" type="submit" onclick="return confirm('Vous êtes sûr ?')">
-                                Supprimer
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-</div>
+</main>
 
 @endsection
