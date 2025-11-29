@@ -191,8 +191,8 @@
     </div>
 
     <div class="login-card">
-        <div class="logo">Bank</div>
-        <h1>BankPortal Pro</h1>
+        <div class="logo">AB</div>
+        <h1>Amane Bank</h1>
         <p class="subtitle">Connexion sécurisée • Administration</p>
 
         @if($errors->any())
@@ -225,7 +225,7 @@
         </form>
 
         <div class="footer">
-            © {{ date('Y') }} BankPortal Pro • Tous droits réservés
+            © {{ date('Y') }} Amane Bank • Tous droits réservés
         </div>
     </div>
 
